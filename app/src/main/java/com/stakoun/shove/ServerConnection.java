@@ -20,7 +20,6 @@ public class ServerConnection
     private int port;
     private DatagramSocket udpClient;
     private InetAddress address;
-    private byte[] data = new byte[1024];
 
     public ServerConnection(GameActivity gameActivity, String host, int port) throws Exception
     {
@@ -56,27 +55,26 @@ public class ServerConnection
     {
         protected Void doInBackground(Player... args)
         {
-            DatagramPacket in = new DatagramPacket(data, data.length);
-
             String str = args[0].toString();
-            data = str.getBytes();
+            byte[] data = str.getBytes();
 
             DatagramPacket out = new DatagramPacket(data, data.length, address, port);
-
             try {
                 udpClient.send(out);
             } catch (IOException e) {
                 Log.d("UpdateTask", e.getMessage());
             }
 
+            data = new byte[1024];
+
+            DatagramPacket in = new DatagramPacket(data, data.length);
             try {
                 udpClient.receive(in);
             } catch (IOException e) {
                 Log.d("UpdateTask", e.getMessage());
             }
-            str = new String(in.getData(), 0, in.getLength());
 
-            Log.d("UpdateTask", str);
+            str = new String(in.getData(), 0, in.getLength());
 
             gameActivity.updatePlayers(str);
 
