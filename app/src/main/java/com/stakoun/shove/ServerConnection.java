@@ -32,9 +32,9 @@ public class ServerConnection
         initAddressTask.get();
     }
 
-    public void update(Player player)
+    public void update(String str)
     {
-        new UpdateTask().execute(player);
+        new UpdateTask().execute(str);
     }
 
     private class InitAddressTask extends AsyncTask<Void, Void, Void>
@@ -51,12 +51,11 @@ public class ServerConnection
 
     }
 
-    private class UpdateTask extends AsyncTask<Player, Void, Void>
+    private class UpdateTask extends AsyncTask<String, Void, Void>
     {
-        protected Void doInBackground(Player... args)
+        protected Void doInBackground(String... args)
         {
-            String str = args[0].toString();
-            byte[] data = str.getBytes();
+            byte[] data = args[0].getBytes();
 
             DatagramPacket out = new DatagramPacket(data, data.length, address, port);
             try {
@@ -74,7 +73,7 @@ public class ServerConnection
                 Log.d("UpdateTask", e.getMessage());
             }
 
-            str = new String(in.getData(), 0, in.getLength());
+            String str = new String(in.getData(), 0, in.getLength());
 
             gameActivity.updatePlayers(str);
 

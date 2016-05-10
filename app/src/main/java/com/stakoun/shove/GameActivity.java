@@ -7,14 +7,13 @@ import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
-import java.io.IOException;
-
 public class GameActivity extends AppCompatActivity
 {
-    private Player self;
+    private String displayName;
     private Player[] players;
     private ServerConnection serverConnection;
     private Handler gameHandler;
+    private Location touchLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -24,8 +23,8 @@ public class GameActivity extends AppCompatActivity
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_game);
 
-        self = new Player(getIntent().getStringExtra("displayname"));
-        players = new Player[] { self };
+
+        players = new Player[0];
 
         try {
             serverConnection = new ServerConnection(this, "54.201.81.77", 7000);
@@ -48,7 +47,6 @@ public class GameActivity extends AppCompatActivity
             new Runnable() {
                 @Override
                 public void run() {
-                    serverConnection.update(self);
                     drawPlayers();
                     gameHandler.postDelayed(this, 1000);
                 }
@@ -58,9 +56,7 @@ public class GameActivity extends AppCompatActivity
     private void drawPlayers()
     {
         for (Player p : players) {
-            if (p.getName().equals(self.getName())) {
-                self = p;
-            }
+            Log.d("drawPlayers", p.toString());
         }
     }
 
