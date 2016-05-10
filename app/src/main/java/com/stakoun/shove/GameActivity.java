@@ -23,6 +23,7 @@ public class GameActivity extends AppCompatActivity
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_game);
 
+        displayName = getIntent().getStringExtra("displayname");
 
         players = new Player[0];
 
@@ -47,6 +48,7 @@ public class GameActivity extends AppCompatActivity
             new Runnable() {
                 @Override
                 public void run() {
+                    serverConnection.update(displayName+" "+(touchLocation == null ? "null null" : touchLocation.toString()));
                     drawPlayers();
                     gameHandler.postDelayed(this, 1000);
                 }
