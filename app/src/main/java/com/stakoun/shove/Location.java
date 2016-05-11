@@ -13,9 +13,18 @@ public class Location
         this.y = y;
     }
 
+    public float getX()
+    {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
     @Override
     public String toString() {
-        return this.x + " " + this.y;
+        return x + " " + y;
     }
 
 }

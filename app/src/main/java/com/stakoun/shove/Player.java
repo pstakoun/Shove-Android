@@ -1,7 +1,5 @@
 package com.stakoun.shove;
 
-import android.util.Log;
-
 /**
  * Created by Peter on 2016-05-06.
  */
