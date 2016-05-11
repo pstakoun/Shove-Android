@@ -9,7 +9,7 @@ import android.view.WindowManager;
 
 public class GameActivity extends AppCompatActivity
 {
-    private String displayName;
+    private Player self;
     private Player[] players;
     private ServerConnection serverConnection;
     private Handler gameHandler;
@@ -23,9 +23,9 @@ public class GameActivity extends AppCompatActivity
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_game);
 
-        displayName = getIntent().getStringExtra("displayname");
+        self = new Player(getIntent().getStringExtra("displayname"));
 
-        players = new Player[0];
+        players = new Player[] { self };
 
         try {
             serverConnection = new ServerConnection(this, "54.201.81.77", 7000);
@@ -48,7 +48,7 @@ public class GameActivity extends AppCompatActivity
             new Runnable() {
                 @Override
                 public void run() {
-                    serverConnection.update(displayName+" "+(touchLocation == null ? "null null" : touchLocation.toString()));
+                    serverConnection.update(self.toString()+" "+(touchLocation == null ? "null null" : touchLocation.toString()));
                     drawPlayers();
                     gameHandler.postDelayed(this, 1000);
                 }
@@ -58,6 +58,9 @@ public class GameActivity extends AppCompatActivity
     private void drawPlayers()
     {
         for (Player p : players) {
+            if (p.getName().equals(self.getName())) {
+                self = p;
+            }
             Log.d("drawPlayers", p.toString());
         }
     }
