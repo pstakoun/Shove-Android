@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -58,10 +59,17 @@ public class GameActivity extends AppCompatActivity
         finish();
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent e)
+    {
+        touchLocation = new Location(e.getX(), e.getY());
+        Log.d("touch", touchLocation.toString());
+        return true;
+    }
+
     public void updatePlayers(String str)
     {
         players = Player.arrayFromString(str);
-        //drawPlayers();
     }
 
     private void startGame()
@@ -79,12 +87,7 @@ public class GameActivity extends AppCompatActivity
                     gameView.invalidate();
                     gameHandler.postDelayed(this, 50);
                 }
-            }, 1000L);
-    }
-
-    private void drawPlayers()
-    {
-        gameView.invalidate();
+            }, 50);
     }
 
     private class GameView extends View
