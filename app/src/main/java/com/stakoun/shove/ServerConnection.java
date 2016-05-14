@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.URL;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Peter on 2016-05-06.
@@ -20,6 +18,8 @@ public class ServerConnection
     private int port;
     private DatagramSocket udpClient;
     private InetAddress address;
+    private int numTasks;
+    private int numSent;
 
     public ServerConnection(GameActivity gameActivity, String host, int port) throws Exception
     {
@@ -27,6 +27,9 @@ public class ServerConnection
         this.host = host;
         this.port = port;
         udpClient = new DatagramSocket();
+        udpClient.setSoTimeout(100);
+        numTasks = 0;
+        numSent = 0;
         InitAddressTask initAddressTask = new InitAddressTask();
         initAddressTask.execute();
         initAddressTask.get();
@@ -55,6 +58,8 @@ public class ServerConnection
     {
         protected Void doInBackground(String... args)
         {
+            Log.d("UpdateTask", "Sent: "+args[0]+"\n"+(++numTasks)+" tasks "+numSent+++" sent");
+
             byte[] data = args[0].getBytes();
 
             DatagramPacket out = new DatagramPacket(data, data.length, address, port);
@@ -70,12 +75,18 @@ public class ServerConnection
             try {
                 udpClient.receive(in);
             } catch (IOException e) {
-                Log.d("UpdateTask", e.getMessage());
+                Log.d("UpdateTask", "Something bad happened");
+                numTasks--;
+                return null;
             }
 
             String str = new String(in.getData(), 0, in.getLength());
 
+            Log.d("UpdateTask", "Received: "+str);
+
             gameActivity.updatePlayers(str);
+
+            numTasks--;
 
             return null;
         }

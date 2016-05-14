@@ -1,12 +1,12 @@
 package com.stakoun.shove;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -14,8 +14,10 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-public class GameActivity extends AppCompatActivity
+public class GameActivity extends Activity
 {
+    private final float gameSize = 500f;
+
     private GameView gameView;
     private Player self;
     private Player[] players;
@@ -23,6 +25,7 @@ public class GameActivity extends AppCompatActivity
     private Handler gameHandler;
     private Location touchLocation;
     private boolean paused;
+    private int screenWidth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -38,7 +41,7 @@ public class GameActivity extends AppCompatActivity
         players = new Player[] { self };
 
         try {
-            serverConnection = new ServerConnection(this, "54.201.81.77", 7000);
+            serverConnection = new ServerConnection(this, "52.24.206.203", 7000);
         } catch (Exception e) {
             Log.d("serverConnection", e.getMessage());
         }
@@ -50,19 +53,14 @@ public class GameActivity extends AppCompatActivity
     public void onPause()
     {
         super.onPause();
-
         paused = true;
-
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-
         finish();
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent e)
     {
-        touchLocation = new Location(e.getX(), e.getY());
+        touchLocation = new Location(e.getX()*(gameSize/screenWidth), e.getY()*(gameSize/screenWidth));
         Log.d("touch", touchLocation.toString());
         return true;
     }
@@ -85,9 +83,14 @@ public class GameActivity extends AppCompatActivity
                     }
                     serverConnection.update(self.toString()+" "+(touchLocation == null ? "null null" : touchLocation.toString()));
                     gameView.invalidate();
-                    gameHandler.postDelayed(this, 50);
+                    gameHandler.postDelayed(this, 100);
                 }
-            }, 50);
+            }, 100);
+    }
+
+    private float scale(float n)
+    {
+        return n*(screenWidth/gameSize);
     }
 
     private class GameView extends View
@@ -98,11 +101,15 @@ public class GameActivity extends AppCompatActivity
         }
 
         @Override
+        protected void onSizeChanged(int w, int h, int oldW, int oldH) {
+            screenWidth = w;
+            super.onSizeChanged(w, h, oldW, oldH);
+        }
+
+        @Override
         protected void onDraw(Canvas canvas)
         {
             super.onDraw(canvas);
-            int x = getWidth();
-            int y = getHeight();
             int radius = 10;
             Paint paint = new Paint();
             paint.setStyle(Paint.Style.FILL);
@@ -116,10 +123,14 @@ public class GameActivity extends AppCompatActivity
                     self = p;
                 }
                 if (p.getLocation() != null) {
-                    canvas.drawCircle(p.getLocation().getX(), p.getLocation().getY(), radius, paint);
+                    canvas.drawCircle(scale(p.getLocation().getX()), scale(p.getLocation().getY()), scale(radius), paint);
                 }
                 Log.d("drawing", p.toString());
             }
+
+            paint.setColor(Color.WHITE);
+            paint.setStyle(Paint.Style.STROKE);
+            canvas.drawLine(0, screenWidth, screenWidth, screenWidth, paint);
         }
 
     }
