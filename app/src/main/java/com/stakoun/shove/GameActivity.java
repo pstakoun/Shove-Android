@@ -2,7 +2,6 @@ package com.stakoun.shove;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -16,7 +15,8 @@ import android.view.WindowManager;
 
 public class GameActivity extends Activity
 {
-    private final float gameSize = 500f;
+    private final float GAME_SIZE = 500f;
+    private final int PLAYER_SIZE = 10;
 
     private GameView gameView;
     private Player self;
@@ -60,7 +60,7 @@ public class GameActivity extends Activity
     @Override
     public boolean onTouchEvent(MotionEvent e)
     {
-        touchLocation = new Location(e.getX()*(gameSize/screenWidth), e.getY()*(gameSize/screenWidth));
+        touchLocation = new Location(unscale(e.getX()), unscale(e.getY()));
         Log.d("touch", touchLocation.toString());
         return true;
     }
@@ -90,7 +90,12 @@ public class GameActivity extends Activity
 
     private float scale(float n)
     {
-        return n*(screenWidth/gameSize);
+        return n*(screenWidth/GAME_SIZE);
+    }
+
+    private float unscale(float n)
+    {
+        return n*(GAME_SIZE/screenWidth);
     }
 
     private class GameView extends View
@@ -110,7 +115,6 @@ public class GameActivity extends Activity
         protected void onDraw(Canvas canvas)
         {
             super.onDraw(canvas);
-            int radius = 10;
             Paint paint = new Paint();
             paint.setStyle(Paint.Style.FILL);
             paint.setColor(Color.BLACK);
@@ -123,7 +127,7 @@ public class GameActivity extends Activity
                     self = p;
                 }
                 if (p.getLocation() != null) {
-                    canvas.drawCircle(scale(p.getLocation().getX()), scale(p.getLocation().getY()), scale(radius), paint);
+                    canvas.drawCircle(scale(p.getLocation().getX()), scale(p.getLocation().getY()), scale(PLAYER_SIZE), paint);
                 }
                 Log.d("drawing", p.toString());
             }
