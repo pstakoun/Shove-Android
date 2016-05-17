@@ -60,8 +60,11 @@ public class GameActivity extends Activity
     @Override
     public boolean onTouchEvent(MotionEvent e)
     {
-        touchLocation = new Location(unscale(e.getX()), unscale(e.getY()));
-        Log.d("touch", touchLocation.toString());
+        if (e.getAction() == MotionEvent.ACTION_UP || e.getAction() == MotionEvent.ACTION_CANCEL) {
+            touchLocation = null;
+        } else {
+            touchLocation = new Location(unscale(e.getX()), unscale(e.getY()));
+        }
         return true;
     }
 
@@ -81,7 +84,7 @@ public class GameActivity extends Activity
                     if (paused) {
                         return;
                     }
-                    serverConnection.update(self.toString()+" "+(touchLocation == null ? "null null" : touchLocation.toString()));
+                    serverConnection.update(self.getName()+" "+(touchLocation == null ? "null null" : touchLocation.toString()));
                     gameView.invalidate();
                     gameHandler.postDelayed(this, 100);
                 }
