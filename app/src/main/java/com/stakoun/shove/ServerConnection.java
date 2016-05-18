@@ -27,7 +27,7 @@ public class ServerConnection
         this.host = host;
         this.port = port;
         udpClient = new DatagramSocket();
-        udpClient.setSoTimeout(100);
+        udpClient.setSoTimeout(50);
         numTasks = 0;
         numSent = 0;
         InitAddressTask initAddressTask = new InitAddressTask();

@@ -16,7 +16,7 @@ import android.view.WindowManager;
 public class GameActivity extends Activity
 {
     private final float GAME_SIZE = 500f;
-    private final int PLAYER_SIZE = 10;
+    private final int PLAYER_RADIUS = 15;
 
     private GameView gameView;
     private Player self;
@@ -86,9 +86,9 @@ public class GameActivity extends Activity
                     }
                     serverConnection.update(self.getName()+" "+(touchLocation == null ? "null null" : touchLocation.toString()));
                     gameView.invalidate();
-                    gameHandler.postDelayed(this, 100);
+                    gameHandler.postDelayed(this, 50);
                 }
-            }, 100);
+            }, 50);
     }
 
     private float scale(float n)
@@ -130,7 +130,7 @@ public class GameActivity extends Activity
                     self = p;
                 }
                 if (p.getLocation() != null) {
-                    canvas.drawCircle(scale(p.getLocation().getX()), scale(p.getLocation().getY()), scale(PLAYER_SIZE), paint);
+                    canvas.drawCircle(scale(p.getLocation().getX()), scale(p.getLocation().getY()), scale(PLAYER_RADIUS), paint);
                 }
                 Log.d("drawing", p.toString());
             }
