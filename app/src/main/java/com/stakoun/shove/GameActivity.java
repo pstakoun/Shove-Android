@@ -15,8 +15,9 @@ import android.view.WindowManager;
 
 public class GameActivity extends Activity
 {
-    private final float GAME_SIZE = 500f;
-    private final int PLAYER_RADIUS = 15;
+    private static final float GAME_SIZE = 500f;
+    private static final int PLAYER_RADIUS = 15;
+    private static final int[] colors = { Color.BLUE, Color.RED, Color.GREEN, Color.YELLOW };
 
     private GameView gameView;
     private Player self;
@@ -119,10 +120,10 @@ public class GameActivity extends Activity
         {
             super.onDraw(canvas);
             Paint paint = new Paint();
+            paint.setTextSize(paint.getTextSize() * 5);
             paint.setStyle(Paint.Style.FILL);
             paint.setColor(Color.BLACK);
             canvas.drawPaint(paint);
-            paint.setColor(Color.WHITE);
 
             // Draw players
             for (Player p : players) {
@@ -130,12 +131,14 @@ public class GameActivity extends Activity
                     self = p;
                 }
                 if (p.getLocation() != null) {
+                    paint.setColor(colors[p.getColor()]);
                     canvas.drawCircle(scale(p.getLocation().getX()), scale(p.getLocation().getY()), scale(PLAYER_RADIUS), paint);
+                    paint.setColor(Color.WHITE);
+                    canvas.drawText(p.getName(), scale(p.getLocation().getX() - PLAYER_RADIUS), scale(p.getLocation().getY() - PLAYER_RADIUS * 1.5f), paint);
                 }
                 Log.d("drawing", p.toString());
             }
 
-            paint.setColor(Color.WHITE);
             paint.setStyle(Paint.Style.STROKE);
             canvas.drawLine(0, screenWidth, screenWidth, screenWidth, paint);
         }

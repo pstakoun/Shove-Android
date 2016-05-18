@@ -7,6 +7,7 @@ public class Player
 {
     private String name;
     private Location location;
+    private int color;
 
     public Player(String name)
     {
@@ -14,10 +15,11 @@ public class Player
         this.location = null;
     }
 
-    public Player(String name, Location location)
+    public Player(String name, Location location, int color)
     {
         this.name = name;
         this.location = location;
+        this.color = color;
     }
 
     public static Player[] arrayFromString(String str)
@@ -29,8 +31,7 @@ public class Player
 
         for (int i = 0; i < numPlayers; i++) {
             String[] playerProperties = playerStrings[i].split(" ");
-            players[i] = new Player(playerProperties[0],
-                    new Location(Float.parseFloat(playerProperties[1]), Float.parseFloat(playerProperties[2])));
+            players[i] = new Player(playerProperties[0], new Location(Float.parseFloat(playerProperties[1]), Float.parseFloat(playerProperties[2])), Integer.parseInt(playerProperties[3]));
         }
 
         return players;
@@ -42,6 +43,10 @@ public class Player
 
     public Location getLocation() {
         return location;
+    }
+
+    public int getColor() {
+        return color;
     }
 
     @Override
