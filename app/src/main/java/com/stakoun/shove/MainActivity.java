@@ -14,6 +14,12 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
         ((TextView) findViewById(R.id.error_message)).setText("");
     }
 
