@@ -15,8 +15,8 @@ import android.view.WindowManager;
 
 public class GameActivity extends Activity
 {
-    private static final float GAME_SIZE = 500f;
-    private static final int PLAYER_RADIUS = 15;
+    private static final float GAME_SIZE = 400f;
+    private static final int PLAYER_RADIUS = 16;
     private static final int[] colors = { Color.BLUE, Color.RED, Color.GREEN, Color.YELLOW };
 
     private GameView gameView;
@@ -27,6 +27,7 @@ public class GameActivity extends Activity
     private Location touchLocation;
     private boolean paused;
     private int screenWidth;
+    private int screenHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -64,7 +65,7 @@ public class GameActivity extends Activity
         if (e.getAction() == MotionEvent.ACTION_UP || e.getAction() == MotionEvent.ACTION_CANCEL) {
             touchLocation = null;
         } else {
-            touchLocation = new Location(unscale(e.getX()), unscale(e.getY()));
+            touchLocation = new Location(unscale(e.getX()), unscale(e.getY() - (screenHeight - screenWidth) / 2));
         }
         return true;
     }
@@ -112,6 +113,7 @@ public class GameActivity extends Activity
         @Override
         protected void onSizeChanged(int w, int h, int oldW, int oldH) {
             screenWidth = w;
+            screenHeight = h;
             super.onSizeChanged(w, h, oldW, oldH);
         }
 
@@ -125,22 +127,25 @@ public class GameActivity extends Activity
             paint.setColor(Color.BLACK);
             canvas.drawPaint(paint);
 
+            paint.setColor(Color.WHITE);
+            paint.setStrokeWidth(5);
+            paint.setStyle(Paint.Style.STROKE);
+            canvas.drawCircle(screenWidth/2, screenHeight/2, screenWidth/2, paint);
+
             // Draw players
+            paint.setStyle(Paint.Style.FILL);
             for (Player p : players) {
                 if (p.getName().equals(self.getName())) {
                     self = p;
                 }
                 if (p.getLocation() != null) {
                     paint.setColor(colors[p.getColor()]);
-                    canvas.drawCircle(scale(p.getLocation().getX()), scale(p.getLocation().getY()), scale(PLAYER_RADIUS), paint);
+                    canvas.drawCircle(scale(p.getLocation().getX()), scale(p.getLocation().getY()) + (screenHeight - screenWidth) / 2, scale(PLAYER_RADIUS), paint);
                     paint.setColor(Color.WHITE);
-                    canvas.drawText(p.getName(), scale(p.getLocation().getX() - PLAYER_RADIUS), scale(p.getLocation().getY() - PLAYER_RADIUS * 1.5f), paint);
+                    canvas.drawText(p.getName(), scale(p.getLocation().getX() - PLAYER_RADIUS), scale(p.getLocation().getY() - PLAYER_RADIUS * 1.5f) + (screenHeight - screenWidth) / 2, paint);
                 }
                 Log.d("drawing", p.toString());
             }
-
-            paint.setStyle(Paint.Style.STROKE);
-            canvas.drawLine(0, screenWidth, screenWidth, screenWidth, paint);
         }
 
     }
