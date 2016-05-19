@@ -27,7 +27,7 @@ public class ServerConnection
         this.host = host;
         this.port = port;
         udpClient = new DatagramSocket();
-        udpClient.setSoTimeout(50);
+        udpClient.setSoTimeout(1);
         numTasks = 0;
         numSent = 0;
         InitAddressTask initAddressTask = new InitAddressTask();
@@ -72,19 +72,22 @@ public class ServerConnection
             data = new byte[1024];
 
             DatagramPacket in = new DatagramPacket(data, data.length);
-            try {
-                udpClient.receive(in);
-            } catch (IOException e) {
-                Log.d("UpdateTask", "Something bad happened");
-                numTasks--;
-                return null;
+            long start = System.currentTimeMillis();
+            String result = null;
+            while (System.currentTimeMillis() - start < 5) {
+                try {
+                    udpClient.receive(in);
+                    result = new String(in.getData(), 0, in.getLength());
+                    Log.d("UpdateTask", "Received: "+result);
+                } catch (IOException e) {
+                    Log.d("UpdateTask", "Something bad happened");
+                    break;
+                }
             }
 
-            String str = new String(in.getData(), 0, in.getLength());
-
-            Log.d("UpdateTask", "Received: "+str);
-
-            gameActivity.updatePlayers(str);
+            if (result != null) {
+                gameActivity.updatePlayers(result);
+            }
 
             numTasks--;
 

@@ -88,9 +88,9 @@ public class GameActivity extends Activity
                     }
                     serverConnection.update(self.getName()+" "+(touchLocation == null ? "null null" : touchLocation.toString()));
                     gameView.invalidate();
-                    gameHandler.postDelayed(this, 50);
+                    gameHandler.postDelayed(this, 20);
                 }
-            }, 50);
+            }, 20);
     }
 
     private float scale(float n)
