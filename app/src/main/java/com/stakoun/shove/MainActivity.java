@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ((TextView) findViewById(R.id.error_message)).setText("");
     }
 
     private void error(String message)
