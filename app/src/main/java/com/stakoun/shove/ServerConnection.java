@@ -74,7 +74,7 @@ public class ServerConnection
             DatagramPacket in = new DatagramPacket(data, data.length);
             long start = System.currentTimeMillis();
             String result = null;
-            while (System.currentTimeMillis() - start < 5) {
+            while (System.currentTimeMillis() - start < 20) {
                 try {
                     udpClient.receive(in);
                     result = new String(in.getData(), 0, in.getLength());
