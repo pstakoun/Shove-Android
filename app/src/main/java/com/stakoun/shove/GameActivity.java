@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import java.util.Random;
+
 public class GameActivity extends Activity
 {
     private static final float GAME_SIZE = 400f;
@@ -21,6 +23,7 @@ public class GameActivity extends Activity
 
     private GameView gameView;
     private Player self;
+    private int id;
     private Player[] players;
     private ServerConnection serverConnection;
     private Handler gameHandler;
@@ -41,6 +44,9 @@ public class GameActivity extends Activity
         self = new Player(getIntent().getStringExtra("displayname"));
 
         players = new Player[] { self };
+
+        Random random = new Random();
+        id = random.nextInt(Integer.MAX_VALUE);
 
         try {
             serverConnection = new ServerConnection(this, "52.24.206.203", 7000);
@@ -86,7 +92,7 @@ public class GameActivity extends Activity
                     if (paused) {
                         return;
                     }
-                    serverConnection.update(self.getName()+" "+(touchLocation == null ? "null null" : touchLocation.toString()));
+                    serverConnection.update(id+" "+self.getName()+" "+(touchLocation == null ? "null null" : touchLocation.toString()));
                     gameView.invalidate();
                     gameHandler.postDelayed(this, 20);
                 }
