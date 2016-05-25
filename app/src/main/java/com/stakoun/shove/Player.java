@@ -2,6 +2,7 @@ package com.stakoun.shove;
 
 /**
  * The Player class stores the information of a player in the game.
+ * 3.1a Using classes
  *
  * @author Peter Stakoun
  */
@@ -13,17 +14,20 @@ public class Player
 
     /**
      * A constructor for the Player class that takes in its display name as a parameter.
+     * 3.1b Using constructors
      *
      * @param name the Player's display name
      */
     public Player(String name)
     {
+        // 3.1h Calling methods in same class
         setName(name);
         setLocation(null);
     }
 
     /**
      * A constructor for the Player class that takes in its display name, location, and color as parameters.
+     * 3.1b Using overloaded methods/constructors
      *
      * @param name the Player's display name
      * @param location the Player's location
@@ -31,6 +35,7 @@ public class Player
      */
     public Player(String name, Location location, int color)
     {
+        // 3.1h Calling methods in same class
         setName(name);
         setLocation(location);
         setColor(color);
@@ -38,6 +43,8 @@ public class Player
 
     /**
      * The arrayFromString method converts a String of player data into an array of Players
+     * 3.1c Using arrays
+     * 3.1f Using String parsing
      *
      * @param str Player data in String format
      * @return a Player array from the given data
@@ -52,6 +59,7 @@ public class Player
         Player[] players = new Player[numPlayers];
 
         // Initialize each Player in array from given data
+        // 3.1d Using loops
         for (int i = 0; i < numPlayers; i++) {
             String[] playerProperties = playerStrings[i].split(" ");
             players[i] = new Player(playerProperties[0], new Location(Float.parseFloat(playerProperties[1]), Float.parseFloat(playerProperties[2])), Integer.parseInt(playerProperties[3]));
@@ -63,6 +71,7 @@ public class Player
 
     /**
      * The getName method returns the Player's display name.
+     * 3.1b Using accessors
      *
      * @return display name of Player
      */
@@ -72,6 +81,7 @@ public class Player
 
     /**
      * The setName method sets the Player's display name to the given value.
+     * 3.1b Using mutators
      *
      * @param name given display name
      */
@@ -81,6 +91,7 @@ public class Player
 
     /**
      * The getLocation method returns the Player's location.
+     * 3.1b Using accessors
      *
      * @return Location of Player
      */
@@ -90,6 +101,7 @@ public class Player
 
     /**
      * The setLocation method sets the Player's Location to the given Location.
+     * 3.1b Using mutators
      *
      * @param location given Location
      */
@@ -99,6 +111,7 @@ public class Player
 
     /**
      * The getColor method returns the Player's color id.
+     * 3.1b Using accessors
      *
      * @return color id of Player
      */
@@ -108,6 +121,7 @@ public class Player
 
     /**
      * The setColor method sets the Player's color id to the given integer.
+     * 3.1b Using mutators
      *
      * @param color given color id
      */

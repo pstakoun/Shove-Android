@@ -58,6 +58,7 @@ public class GameActivity extends Activity
         players = new Player[] { self };
 
         // Generate player id
+        // 3.1g Using randomization
         Random random = new Random();
         id = random.nextInt(Integer.MAX_VALUE);
 
@@ -69,6 +70,7 @@ public class GameActivity extends Activity
         }
 
         // Start game loop
+        // 3.1h Calling methods in same class
         startGame();
     }
 
@@ -95,6 +97,7 @@ public class GameActivity extends Activity
     @Override
     public boolean onTouchEvent(MotionEvent e)
     {
+        // 3.1e Using if/else
         if (e.getAction() == MotionEvent.ACTION_UP || e.getAction() == MotionEvent.ACTION_CANCEL) {
             // Remove the stored location if the user is no longer touching the screen
             touchLocation = null;
@@ -214,11 +217,14 @@ public class GameActivity extends Activity
 
             // Draw players
             paint.setStyle(Paint.Style.FILL);
+            // 3.1d Using loops
             for (Player p : players) {
+                // 3.1e Using if
                 if (p.getName().equals(self.getName())) {
                     // Update self
                     self = p;
                 }
+                // 3.1e Using if
                 if (p.getLocation() != null) {
                     // Draw player on screen
                     paint.setColor(colors[p.getColor()]);
@@ -227,7 +233,7 @@ public class GameActivity extends Activity
                     paint.setColor(Color.WHITE);
                     canvas.drawText(p.getName(), scale(p.getLocation().getX() - PLAYER_RADIUS), scale(p.getLocation().getY() - PLAYER_RADIUS * 1.5f) + (screenHeight - screenWidth) / 2, paint);
                 }
-                // Log player information to console
+                // Log player information to console,
                 Log.d("drawing", p.toString());
             }
         }

@@ -10,6 +10,7 @@ import java.net.InetAddress;
 
 /**
  * The ServerConnection class handles the transmission of information to and from the server.
+ * 3.1a Using classes
  *
  * @author Peter Stakoun
  */
@@ -25,6 +26,7 @@ public class ServerConnection
 
     /**
      * The default constructor for the ServerConnection class.
+     * 3.1b Using constructors
      *
      * @param gameActivity GameActivity in which the ServerConnection is stored
      * @param host server host
@@ -119,6 +121,7 @@ public class ServerConnection
             long start = System.currentTimeMillis();
             String result = null;
             // Receive packets until finished or 20ms passed
+            // 3.1d Using loops
             while (System.currentTimeMillis() - start < 20) {
                 // Receive packet and store contents
                 try {
@@ -132,6 +135,7 @@ public class ServerConnection
             }
 
             // Update Players with new data from packet
+            // 3.1e Using if
             if (result != null) {
                 gameActivity.updatePlayers(result);
             }

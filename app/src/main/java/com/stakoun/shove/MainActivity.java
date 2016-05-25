@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity
         String displayName = ((EditText) findViewById(R.id.display_name_field)).getText().toString();
 
         // Check validity of display name
+        // 3.1h Calling methods in same class
         if (displayName.length() < 3) {
             error("Display name must be at least 3 characters in length.");
         } else if (!displayName.matches("[A-Za-z0-9]+")) {
