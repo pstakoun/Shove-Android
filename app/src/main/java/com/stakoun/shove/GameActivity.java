@@ -64,7 +64,7 @@ public class GameActivity extends Activity
 
         // Create connection to server
         try {
-            serverConnection = new ServerConnection(this, "52.24.206.203", 7000);
+            serverConnection = new ServerConnection(this, "dev.peterstakoun.com", 7000);
         } catch (Exception e) {
             Log.d("serverConnection", e.getMessage());
         }
